@@ -10,7 +10,6 @@ import {
     TableRow,
     TableCell,
     Typography,
-    useTheme,
 } from "@mui/material";
 
 export interface AxolotlInventory {
@@ -25,7 +24,6 @@ export interface AxolotlInventoryCardProps {
 }
 
 const AxolotlInventoryCard: React.FC<AxolotlInventoryCardProps> = ({ data }) => {
-    const theme = useTheme();
     return (
          <Card sx={{ height: 300 , border: (theme) => `1px solid ${theme.palette.divider}`, boxShadow: 0, backgroundColor: (theme) => theme.palette.background.paper, p: 4}}>
             <CardContent>

@@ -13,7 +13,6 @@ import {
     Tooltip,
     Link,
     FormControl,
-    InputLabel,
     Select,
     MenuItem,
     SelectChangeEvent,
@@ -55,8 +54,8 @@ interface LabeledFieldProps {
     tooltip: string;
     error?: boolean;
     helperText?: string;
-    [key: string]: any;
-}
+    [key: string]: any; // eslint-disable-line
+} 
 
 const LabeledField: React.FC<LabeledFieldProps> = ({ label, tooltip, error, helperText, ...props }) => (
     <Box sx={{ mt: 2 }}>
@@ -138,8 +137,6 @@ export default function OnboardingForm() {
         handleSubmit,
         control,
         formState: { errors },
-        setValue,
-        watch,
     } = useForm<OnboardingFormData>({
         defaultValues: {
             fullName: "",

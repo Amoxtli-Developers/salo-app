@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
         "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
       // Redirige al login
       router.push("/");
-    } catch (error: any) {
+    } catch (error: any) { // eslint-disable-line
       dispatch(authRequestFailure(error.message));
     }
   };

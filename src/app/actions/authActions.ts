@@ -6,7 +6,7 @@ export async function loginWithEmail(email: string, password: string) {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     return userCredential; // Return the full object!
-  } catch (error: any) {
+  } catch (error: any) { // eslint-disable-line
     throw new Error(error.message);
   }
 }

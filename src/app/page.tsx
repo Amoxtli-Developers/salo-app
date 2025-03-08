@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import { Box } from "@mui/material";
 import AuthForm from "@/components/Auth/AuthForm";
 

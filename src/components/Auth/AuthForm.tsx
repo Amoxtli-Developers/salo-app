@@ -34,6 +34,7 @@ import { toast } from "react-toastify";
 import { getFriendlyFirebaseError } from "@/utils/firebaseErrors";
 import logo from "@/assets/logos/logo.svg";
 import completeLogo from "@/assets/logos/color-logo.svg";
+import { setPersistence, browserLocalPersistence } from "firebase/auth";
 
 // Firebase & Redux imports
 import { useDispatch, useSelector } from "react-redux";
@@ -83,7 +84,7 @@ export default function AuthForm() {
 
   const router = useRouter();
   const dispatch = useDispatch();
-  const { verificationPending } = useSelector((state: any) => state.auth);
+  const { verificationPending } = useSelector((state: any) => state.auth); // eslint-disable-line
 
   const {
     register,
@@ -117,7 +118,7 @@ export default function AuthForm() {
       }, 1000);
     }
     return () => clearInterval(timer);
-  }, [verificationPending]);
+  }, [verificationPending]); // eslint-disable-line
 
   const handleCloseDialog = () => {
     setVerificationDialogOpen(false);
@@ -136,7 +137,7 @@ export default function AuthForm() {
     try {
       await sendPasswordResetEmail(auth, emailValue);
       toast.success("Se ha enviado un correo de restablecimiento a tu dirección.");
-    } catch (err: any) {
+    } catch (err: any) { // eslint-disable-line
       const friendlyError = getFriendlyFirebaseError(err.message);
       toast.error(friendlyError);
       console.error("Reset password error:", err);
@@ -149,6 +150,7 @@ export default function AuthForm() {
     setLoadingEmail(true);
 
     try {
+        await setPersistence(auth, browserLocalPersistence);
       let userCredential: UserCredential;
       if (isSignUp) {
         // Register new user
@@ -178,7 +180,7 @@ export default function AuthForm() {
         );
         router.replace("/dashboard");
       }
-    } catch (err: any) {
+    } catch (err: any) { // eslint-disable-line
       const friendlyError = getFriendlyFirebaseError(err.message);
       dispatch(authRequestFailure(friendlyError));
       toast.error(friendlyError);
@@ -207,26 +209,13 @@ export default function AuthForm() {
         })
       );
       router.push("/dashboard");
-    } catch (error: any) {
+    } catch (error: any) { // eslint-disable-line
       dispatch(authRequestFailure(error.message));
       toast.error(error.message || "Error en inicio con Google");
       console.error("Google Sign-In error:", error);
     } finally {
       setLoadingGoogle(false);
     }
-  };
-
-  const passwordFieldProps = {
-    type: showPassword ? "text" : "password",
-    InputProps: {
-      endAdornment: (
-        <InputAdornment position="end">
-          <IconButton onClick={() => setShowPassword((prev) => !prev)} edge="end">
-            {showPassword ? <VisibilityOff /> : <Visibility />}
-          </IconButton>
-        </InputAdornment>
-      ),
-    },
   };
 
   return (
