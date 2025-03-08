@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { Box } from "@mui/material";
-import AuthForm from "@/components/Auth/AuthForm";
+import OnboardingForm from "@/components/Onboarding/OnboardingForm";
 
 export default function Auth() {
     return (
         <Box>
-            <AuthForm />
+            <OnboardingForm />
         </Box>
     );
 }
