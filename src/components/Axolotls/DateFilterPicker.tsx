@@ -27,7 +27,7 @@ const DateRangePickerInput: React.FC<DateRangePickerInputProps> = ({
       onChange={handleChange}
       placeholderText="Rango de fechas"
       isClearable
-      customInput={<TextField variant="outlined" size="small" fullWidth sx={{ minWidth: 240 }}/>}
+      customInput={<TextField variant="outlined" size="small" fullWidth sx={{ minWidth: 345 }}/>}
     />
   );
 };

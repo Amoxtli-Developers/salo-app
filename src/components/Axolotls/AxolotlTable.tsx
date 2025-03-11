@@ -32,14 +32,12 @@ export interface Axolotl {
 
 interface AxolotlTableProps {
   data: Axolotl[];
-  onView: (ax: Axolotl) => void;
   onEdit: (ax: Axolotl) => void;
   onDelete: (id: number) => void;
 }
 
 const AxolotlTable: React.FC<AxolotlTableProps> = ({
   data,
-  onView,
   onEdit,
   onDelete,
 }) => {
@@ -155,14 +153,6 @@ const AxolotlTable: React.FC<AxolotlTableProps> = ({
                   open={Boolean(anchorEl) && selectedId === ax.id}
                   onClose={handleMenuClose}
                 >
-                  <MenuItem
-                    onClick={() => {
-                      handleMenuClose();
-                      onView(ax);
-                    }}
-                  >
-                    Ver
-                  </MenuItem>
                   <MenuItem
                     onClick={() => {
                       handleMenuClose();

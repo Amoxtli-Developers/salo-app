@@ -110,7 +110,7 @@ export default function NewAxolotl() {
               Registrar Nuevo Ajolote
             </Typography>
             <Stack direction="row" spacing={2}>
-              <Button variant="outlined" color="inherit" onClick={handleCancel}>
+              <Button variant="outlined" onClick={handleCancel}>
                 Cancelar
               </Button>
               <Button
