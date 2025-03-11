@@ -4,22 +4,22 @@ import React from "react";
 import Chart from "react-apexcharts";
 import { Card, CardContent, Typography, useTheme } from "@mui/material";
 
-export interface TrendDataPoint {
-  x: string; // por ejemplo, mes
+export interface HealthInterventionDataPoint {
+  x: string; // por ejemplo, mes, trimestre, etc.
   y: number;
 }
 
-export interface MortalityBirthTrendChartProps {
+export interface HealthInterventionsChartProps {
   data: {
     id: string;
-    data: TrendDataPoint[];
+    data: HealthInterventionDataPoint[];
   }[];
 }
 
-const MortalityBirthTrendChart: React.FC<MortalityBirthTrendChartProps> = ({ data }) => {
+const HealthInterventionsChart: React.FC<HealthInterventionsChartProps> = ({ data }) => {
   const theme = useTheme();
 
-  // Mapeo de la data a las series que espera ApexCharts
+  // Se mapea la data a las series que espera ApexCharts
   const series = data.map((seriesItem) => ({
     name: seriesItem.id,
     data: seriesItem.data.map((point) => ({ x: point.x, y: point.y })),
@@ -27,7 +27,7 @@ const MortalityBirthTrendChart: React.FC<MortalityBirthTrendChartProps> = ({ dat
 
   const options = {
     chart: {
-      id: "mortality-birth-trend-chart",
+      id: "health-interventions-chart",
       toolbar: { show: true },
     },
     xaxis: {
@@ -36,28 +36,34 @@ const MortalityBirthTrendChart: React.FC<MortalityBirthTrendChartProps> = ({ dat
         text: "Tiempo",
         style: { color: theme.palette.text.primary },
       },
+      labels: {
+        style: { colors: theme.palette.text.primary },
+      },
     },
     yaxis: {
       title: {
-        text: "Cantidad",
+        text: "Intervenciones",
         style: { color: theme.palette.text.primary },
       },
-    },
-    legend: {
-      position: "bottom" as "bottom", // eslint-disable-line
       labels: {
-        colors: theme.palette.text.primary,
+        style: { colors: theme.palette.text.primary },
       },
-    },
-    colors: [theme.palette.primary.main, theme.palette.error.main],
-    tooltip: {
-      theme: theme.palette.mode === "dark" ? "dark" : "light",
-    },
-    dataLabels: {
-      enabled: false,
     },
     stroke: {
       curve: "smooth" as "smooth", // eslint-disable-line
+      width: 2,
+    },
+    markers: {
+      size: 4,
+    },
+    colors: data.map((_, index) =>
+      index === 0 ? theme.palette.primary.main : theme.palette.error.main
+    ),
+    tooltip: {
+      theme: theme.palette.mode === "dark" ? "dark" : "light",
+    },
+    legend: {
+      labels: { colors: theme.palette.text.primary },
     },
   };
 
@@ -73,7 +79,7 @@ const MortalityBirthTrendChart: React.FC<MortalityBirthTrendChartProps> = ({ dat
     >
       <CardContent sx={{ height: "100%" }}>
         <Typography variant="subtitle2" gutterBottom>
-          Tendencia de Mortalidad y Natalidad
+          Intervenciones de Salud a lo Largo del Tiempo
         </Typography>
         <Chart options={options} series={series} type="line" height="240" />
       </CardContent>
@@ -81,4 +87,4 @@ const MortalityBirthTrendChart: React.FC<MortalityBirthTrendChartProps> = ({ dat
   );
 };
 
-export default MortalityBirthTrendChart;
+export default HealthInterventionsChart;

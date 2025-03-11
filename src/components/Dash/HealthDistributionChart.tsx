@@ -1,46 +1,91 @@
 "use client";
 
 import React from "react";
-import { ResponsivePie } from "@nivo/pie";
+import Chart from "react-apexcharts";
 import { Card, Typography, useTheme } from "@mui/material";
 
 export interface HealthDistributionData {
-    id: string;
-    label: string;
-    value: number;
-    color?: string;
+  id: string;
+  label: string;
+  value: number;
+  color?: string;
 }
 
 export interface HealthDistributionChartProps {
-    data: HealthDistributionData[];
+  data: HealthDistributionData[];
 }
 
 const HealthDistributionChart: React.FC<HealthDistributionChartProps> = ({ data }) => {
-    const theme = useTheme();
-    return (
-        <Card sx={{ height: 300 , border: (theme) => `1px solid ${theme.palette.divider}`, boxShadow: 0, backgroundColor: (theme) => theme.palette.background.paper, p: 4}}>
-            <Typography variant="subtitle2" gutterBottom>
-                Distribución de Salud
-            </Typography>
-            <ResponsivePie
-                data={data}
-                margin={{ top: 30, right: 50, bottom: 30, left: 50 }}
-                innerRadius={0.5}  // creates a donut chart effect
-                padAngle={0.7}
-                cornerRadius={3}
-                activeOuterRadiusOffset={8}
-                colors={{ datum: "data.color" }}
-                borderWidth={1}
-                borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
-                arcLinkLabelsSkipAngle={10}
-                arcLinkLabelsTextColor={theme.palette.text.primary}
-                arcLinkLabelsThickness={2}
-                arcLinkLabelsColor={{ from: "color" }}
-                arcLabelsSkipAngle={10}
-                arcLabelsTextColor={{ from: "color", modifiers: [["darker", 2]] }}
-            />
-        </Card>
-    );
+  const theme = useTheme();
+
+  // Mapeo de los datos: series (valores) y labels (nombres de categoría)
+  const series = data.map((d) => d.value);
+  const labels = data.map((d) => d.label);
+  // Se utiliza el color definido en el dato o se toma el color primario del tema
+  const colors = data.map((d) => d.color || theme.palette.primary.main);
+
+  const options = {
+    chart: {
+      type: "donut" as "donut", // eslint-disable-line
+      toolbar: { show: true },
+    },
+    labels: labels,
+    colors: colors,
+    legend: {
+      labels: {
+        colors: theme.palette.text.primary,
+      },
+    },
+    dataLabels: {
+        enabled: true,
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          labels: {
+            show: false,
+            name: {
+              show: true,
+              fontSize: "16px",
+              color: theme.palette.text.primary,
+              offsetY: -10,
+            },
+            value: {
+              show: true,
+              fontSize: "14px",
+              color: theme.palette.text.primary,
+              offsetY: 10,
+            },
+            total: {
+              show: true,
+              label: "Total",
+              color: theme.palette.text.primary,
+            },
+          },
+        },
+      },
+    },
+    tooltip: {
+      theme: theme.palette.mode === "dark" ? "dark" : "light",
+    },
+  };
+
+  return (
+    <Card
+      sx={{
+        height: 300,
+        border: (theme) => `1px solid ${theme.palette.divider}`,
+        boxShadow: 0,
+        backgroundColor: (theme) => theme.palette.background.paper,
+        p: 2,
+      }}
+    >
+      <Typography variant="subtitle2" gutterBottom>
+        Distribución de Salud
+      </Typography>
+      <Chart options={options} series={series} type="donut" height="240" />
+    </Card>
+  );
 };
 
 export default HealthDistributionChart;

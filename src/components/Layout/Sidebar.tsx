@@ -115,7 +115,7 @@ const Sidebar: React.FC = () => {
                             <ListItemButton
                                 selected={activeKey === "2"}
                                 onClick={() =>
-                                    handleNavigation("2", "/axolotls")
+                                    handleNavigation("2", "/mis-axolotls")
                                 }
                                 sx={{
                                     justifyContent: collapsed ? "center" : "flex-start",

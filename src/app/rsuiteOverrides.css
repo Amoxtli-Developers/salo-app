@@ -1,0 +1,22 @@
+/* rsuiteOverrides.css */
+
+/* Estilos para modo oscuro */
+.rsuite-dark .rs-picker-menu {
+    background-color: #424242 !important; /* un tono oscuro */
+    color: #ffffff !important;
+  }
+  
+  .rsuite-dark .rs-calendar-table-cell-content,
+  .rsuite-dark .rs-calendar-header-title,
+  .rsuite-dark .rs-calendar-header-forward,
+  .rsuite-dark .rs-calendar-header-backward {
+    color: #ffffff !important;
+  }
+  
+  /* Ajusta los hover/focus states si es necesario */
+  .rsuite-dark .rs-picker-menu .rs-calendar-table-cell-is-today {
+    background-color: #616161 !important;
+  }
+  
+  /* Puedes continuar sobrescribiendo las clases que necesites */
+  
