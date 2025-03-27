@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev:server": "ts-node src/server/index.ts",
+    "dev:all": "concurrently \"next dev\" \"ts-node src/server/index.ts\""
   },
   "dependencies": {
     "@date-io/date-fns": "^3.2.1",
@@ -21,6 +23,7 @@
     "@rsuite/icons": "^1.3.0",
     "apexcharts": "^4.5.0",
     "date-fns": "^2.29.3",
+    "express": "^4.21.2",
     "firebase": "^11.4.0",
     "framer-motion": "^12.4.10",
     "gsap": "^3.12.7",
@@ -39,11 +42,14 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/express": "^5.0.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^9.1.2",
     "eslint": "^9",
     "eslint-config-next": "15.2.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }

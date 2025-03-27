@@ -102,6 +102,21 @@ export default function AuthForm() {
   // Get current password value for confirmation validation
   const passwordValue = watch("password");
 
+  // LLAMADA A ENDPOINT EXPRESS PRUEBA
+  useEffect(() => {
+    fetch("/api/hello")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.message); 
+        toast.info(data.message);
+      })
+      .catch((err) => {
+        console.error("Error al conectarse con el backend:", err);
+        toast.error("No se pudo conectar con el servidor.");
+      });
+  }, []);
+  
+
   // Countdown effect for verification dialog
   useEffect(() => {
     let timer: NodeJS.Timeout;
