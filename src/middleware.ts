@@ -1,29 +1,27 @@
-// middleware.ts
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-
-// Define protected routes
-const protectedRoutes = ["/dashboard", "/some-other-protected-page"];
+// src/redux/middleware.ts (o en la raíz del proyecto si lo prefieres)
+import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  // Check if the requested URL starts with any of your protected routes
-  if (protectedRoutes.some((route) => request.nextUrl.pathname.startsWith(route))) {
-    // Suppose you store your token in cookies under "token"
     const token = request.cookies.get("token")?.value;
 
-    if (!token) {
-      // If no token, redirect to /login
-      const url = request.nextUrl.clone();
-      url.pathname = "/"; // or "/" if you prefer
-      return NextResponse.redirect(url);
-    }
-  }
+    // Rutas que deseas proteger
+    const protectedRoutes = ["/dashboard"];
 
-  // If token is present or the route is not protected, continue
-  return NextResponse.next();
+    const { pathname } = request.nextUrl;
+
+    // Si la ruta es protegida y no hay token, redirige a login
+    if (protectedRoutes.some((route) => pathname.startsWith(route)) && !token) {
+        return NextResponse.redirect(new URL("/", request.url));
+    }
+
+    // Si hay token, podrías refrescarlo si es necesario o validarlo
+    // Ejemplo de refresco (necesitarías firebase-admin o tu lógica)
+    // ...
+
+    return NextResponse.next();
 }
 
-// Optionally, specify matcher if you only want the middleware to run on certain routes
+// Define las rutas a las que se aplicará este middleware
 export const config = {
-  matcher: ["/dashboard/:path*", "/some-other-protected-page/:path*"],
+    matcher: ["/dashboard/:path*"],
 };

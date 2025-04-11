@@ -20,29 +20,14 @@ import FilterPanel from "@/components/Axolotls/FilterPanel";
 import AxolotlTable, { Axolotl } from "@/components/Axolotls/AxolotlTable";
 
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "@/store";
-import { clearNotification } from "@/features/authSlice";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
 export default function MyAxolotls() {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const notification = useSelector((state: RootState) => state.auth.notification);
   const toastDisplayed = useRef(false);
   const router = useRouter();
-
-  // Show a success toast if there's a notification
-  useEffect(() => {
-    if (notification && !toastDisplayed.current) {
-      toast.success(notification);
-      toastDisplayed.current = true;
-      dispatch(clearNotification());
-    }
-    if (!notification) {
-      toastDisplayed.current = false;
-    }
-  }, [notification, dispatch]);
 
   // Estados para filtros
   const [globalSearch, setGlobalSearch] = useState("");
