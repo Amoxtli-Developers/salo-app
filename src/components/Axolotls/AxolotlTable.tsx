@@ -1,182 +1,304 @@
 import React, { useState } from "react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-  Menu,
-  MenuItem,
-  Chip,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    IconButton,
+    Chip,
+    Box,
+    Typography,
+    Tooltip,
+    alpha,
+    useTheme,
 } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-// Íconos de estado
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import {
+    Pencil,
+    Trash2,
+    CheckCircle,
+    AlertTriangle,
+    AlertCircle,
+    Mars,
+    Venus,
+} from "lucide-react";
 
 export interface Axolotl {
-  id: number;
-  code: string;
-  name: string;
-  sexo: "Masculino" | "Femenino";
-  registro: string;
-  edad: string;
-  estado: "Bueno" | "Regular" | "Crítico";
-  ultimaRevision: string;
+    id: number;
+    code: string;
+    name: string;
+    sexo: "Masculino" | "Femenino";
+    registro: string;
+    edad: string;
+    estado: "Bueno" | "Regular" | "Crítico";
+    ultimaRevision: string;
 }
 
 interface AxolotlTableProps {
-  data: Axolotl[];
-  onEdit: (ax: Axolotl) => void;
-  onDelete: (id: number) => void;
+    data: Axolotl[];
+    onEdit: (ax: Axolotl) => void;
+    onDelete: (id: number) => void;
 }
 
 const AxolotlTable: React.FC<AxolotlTableProps> = ({
-  data,
-  onEdit,
-  onDelete,
+    data,
+    onEdit,
+    onDelete,
 }) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+    const theme = useTheme();
 
-  const handleMenuOpen = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    id: number
-  ) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedId(id);
-  };
+    const getEstadoChip = (estado: string) => {
+        switch (estado) {
+            case "Bueno":
+                return (
+                    <Chip
+                        label="Bueno"
+                        icon={<CheckCircle size={16} />}
+                        size="small"
+                        sx={{
+                            backgroundColor: alpha(
+                                theme.palette.success.main,
+                                0.1
+                            ),
+                            color: theme.palette.success.main,
+                            fontWeight: 500,
+                            "& .MuiChip-icon": {
+                                color: theme.palette.success.main,
+                            },
+                            borderRadius: "8px",
+                        }}
+                    />
+                );
+            case "Regular":
+                return (
+                    <Chip
+                        label="Regular"
+                        icon={<AlertTriangle size={16} />}
+                        size="small"
+                        sx={{
+                            backgroundColor: alpha(
+                                theme.palette.warning.main,
+                                0.1
+                            ),
+                            color: theme.palette.warning.main,
+                            fontWeight: 500,
+                            "& .MuiChip-icon": {
+                                color: theme.palette.warning.main,
+                            },
+                            borderRadius: "8px",
+                        }}
+                    />
+                );
+            case "Crítico":
+                return (
+                    <Chip
+                        label="Crítico"
+                        icon={<AlertCircle size={16} />}
+                        size="small"
+                        sx={{
+                            backgroundColor: alpha(
+                                theme.palette.error.main,
+                                0.1
+                            ),
+                            color: theme.palette.error.main,
+                            fontWeight: 500,
+                            "& .MuiChip-icon": {
+                                color: theme.palette.error.main,
+                            },
+                            borderRadius: "8px",
+                        }}
+                    />
+                );
+            default:
+                return (
+                    <Chip
+                        label={estado}
+                        size="small"
+                        sx={{
+                            backgroundColor: alpha(
+                                theme.palette.text.secondary,
+                                0.1
+                            ),
+                            color: theme.palette.text.secondary,
+                            fontWeight: 500,
+                            borderRadius: "8px",
+                        }}
+                    />
+                );
+        }
+    };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    setSelectedId(null);
-  };
-
-  // Función para mapear el estado a un Chip con color suave e ícono
-  const getEstadoChip = (estado: string) => {
-    switch (estado) {
-      case "Bueno":
-        return (
-          <Chip
-            label="Bueno"
-            icon={<CheckCircleOutlineIcon sx={{ fontSize: 16 }} />}
-            size="small"
+    return (
+        <TableContainer
+            component={Paper}
             sx={{
-              backgroundColor: "#E8F5E9", // Verde claro
-              color: "#388E3C",
-              "& .MuiChip-icon": {
-                color: "#388E3C",
-              },
+                boxShadow: "none",
+                overflow: "hidden",
             }}
-          />
-        );
-      case "Regular":
-        return (
-          <Chip
-            label="Regular"
-            icon={<WarningAmberIcon sx={{ fontSize: 16 }} />}
-            size="small"
-            sx={{
-              backgroundColor: "#FFF8E1", // Amarillo claro
-              color: "#F57C00",
-              "& .MuiChip-icon": {
-                color: "#F57C00",
-              },
-            }}
-          />
-        );
-      case "Crítico":
-        return (
-          <Chip
-            label="Crítico"
-            icon={<ErrorOutlineIcon sx={{ fontSize: 16 }} />}
-            size="small"
-            sx={{
-              backgroundColor: "#FFEBEE", // Rojo claro
-              color: "#D32F2F",
-              "& .MuiChip-icon": {
-                color: "#D32F2F",
-              },
-            }}
-          />
-        );
-      default:
-        return (
-          <Chip
-            label={estado}
-            size="small"
-            sx={{
-              backgroundColor: "#F5F5F5", // Gris claro
-              color: "#616161",
-            }}
-          />
-        );
-    }
-  };
-
-  return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>ID / Código</TableCell>
-            <TableCell>Nombre / Etiqueta</TableCell>
-            <TableCell>Sexo</TableCell>
-            <TableCell>Fecha de Registro</TableCell>
-            <TableCell>Edad</TableCell>
-            <TableCell>Estado de Salud</TableCell>
-            <TableCell>Última Revisión</TableCell>
-            <TableCell>Acciones</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((ax) => (
-            <TableRow key={ax.id}>
-              <TableCell>{ax.code}</TableCell>
-              <TableCell>{ax.name}</TableCell>
-              <TableCell>{ax.sexo}</TableCell>
-              <TableCell>{ax.registro}</TableCell>
-              <TableCell>{ax.edad}</TableCell>
-              <TableCell>{getEstadoChip(ax.estado)}</TableCell>
-              <TableCell>{ax.ultimaRevision}</TableCell>
-              <TableCell>
-                <IconButton onClick={(e) => handleMenuOpen(e, ax.id)}>
-                  <MoreVertIcon />
-                </IconButton>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl) && selectedId === ax.id}
-                  onClose={handleMenuClose}
-                >
-                  <MenuItem
-                    onClick={() => {
-                      handleMenuClose();
-                      onEdit(ax);
-                    }}
-                  >
-                    Editar
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      handleMenuClose();
-                      onDelete(ax.id);
-                    }}
-                  >
-                    Eliminar
-                  </MenuItem>
-                </Menu>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+        >
+            <Table sx={{ minWidth: 650 }}>
+                <TableHead>
+                    <TableRow>
+                        <TableCell sx={{ py: 2, fontWeight: "500" }}>
+                            ID / Código
+                        </TableCell>
+                        <TableCell sx={{ py: 2, fontWeight: "500" }}>
+                            Nombre / Etiqueta
+                        </TableCell>
+                        <TableCell sx={{ py: 2, fontWeight: "500" }}>
+                            Sexo
+                        </TableCell>
+                        <TableCell sx={{ py: 2, fontWeight: "500" }}>
+                            Fecha de Registro
+                        </TableCell>
+                        <TableCell sx={{ py: 2, fontWeight: "500" }}>
+                            Edad
+                        </TableCell>
+                        <TableCell sx={{ py: 2, fontWeight: "500" }}>
+                            Estado de Salud
+                        </TableCell>
+                        <TableCell sx={{ py: 2, fontWeight: "500" }}>
+                            Última Revisión
+                        </TableCell>
+                        <TableCell sx={{ py: 2, fontWeight: "500" }}>
+                            Acciones
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {data.map((ax, index) => (
+                        <TableRow
+                            key={ax.id}
+                            sx={{
+                                "&:nth-of-type(odd)": {
+                                    backgroundColor:
+                                        theme.palette.mode === "dark"
+                                            ? alpha(
+                                                  theme.palette.action.hover,
+                                                  0.05
+                                              )
+                                            : alpha(
+                                                  theme.palette.action.hover,
+                                                  0.02
+                                              ),
+                                },
+                                "&:hover": {
+                                    backgroundColor:
+                                        theme.palette.mode === "dark"
+                                            ? alpha(
+                                                  theme.palette.action.hover,
+                                                  0.1
+                                              )
+                                            : alpha(
+                                                  theme.palette.action.hover,
+                                                  0.05
+                                              ),
+                                },
+                                transition: "background-color 0.2s ease",
+                            }}
+                        >
+                            <TableCell>
+                                <Typography
+                                    variant="body2"
+                                    fontWeight={300}
+                                    fontSize={"12px"}
+                                >
+                                    {ax.code}
+                                </Typography>
+                            </TableCell>
+                            <TableCell>
+                                <Typography
+                                    variant="body2"
+                                    fontWeight={300}
+                                    fontSize={"12px"}
+                                >
+                                    {ax.name}
+                                </Typography>
+                            </TableCell>
+                            <TableCell>
+                                <Typography
+                                    variant="body2"
+                                    fontWeight={300}
+                                    fontSize={"12px"}
+                                >
+                                    {ax.sexo}
+                                </Typography>
+                            </TableCell>
+                            <TableCell>
+                                <Typography
+                                    variant="body2"
+                                    fontWeight={300}
+                                    fontSize={"12px"}
+                                >
+                                    {ax.registro}
+                                </Typography>
+                            </TableCell>
+                            <TableCell>
+                                <Typography
+                                    variant="body2"
+                                    fontWeight={300}
+                                    fontSize={"12px"}
+                                >
+                                    {ax.edad}
+                                </Typography>
+                            </TableCell>
+                            <TableCell>{getEstadoChip(ax.estado)}</TableCell>
+                            <TableCell>
+                                <Typography
+                                    variant="body2"
+                                    fontWeight={300}
+                                    fontSize={"12px"}
+                                >
+                                    {ax.ultimaRevision}
+                                </Typography>
+                            </TableCell>
+                            <TableCell>
+                                <Box sx={{ display: "flex" }}>
+                                    <Tooltip title="Editar">
+                                        <IconButton
+                                            size="small"
+                                            onClick={() => onEdit(ax)}
+                                            sx={{
+                                                "&:hover": {
+                                                    backgroundColor: alpha(
+                                                        theme.palette.primary
+                                                            .main,
+                                                        0.1
+                                                    ),
+                                                },
+                                            }}
+                                        >
+                                            <Pencil size={18} />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Eliminar">
+                                        <IconButton
+                                            size="small"
+                                            onClick={() => onDelete(ax.id)}
+                                            sx={{
+                                                "&:hover": {
+                                                    backgroundColor: alpha(
+                                                        theme.palette.primary
+                                                            .main,
+                                                        0.1
+                                                    ),
+                                                },
+                                            }}
+                                        >
+                                            <Trash2 size={18} />
+                                        </IconButton>
+                                    </Tooltip>
+                                </Box>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+    );
 };
 
 export default AxolotlTable;
