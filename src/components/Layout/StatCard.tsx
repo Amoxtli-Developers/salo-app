@@ -9,7 +9,9 @@ import {
     Chip,
     SxProps,
     Theme,
+    IconButton,
 } from "@mui/material";
+import { ArrowUpRight } from "lucide-react";
 
 export interface StatCardProps {
     /**
@@ -33,12 +35,18 @@ export interface StatCardProps {
      */
     subValue?: string;
     /**
+     * Optional redirect callback function when the user clicks the redirect icon
+     */
+    onRedirect?: () => void;
+    /**
      * Additional styling for the root Card component.
      */
     sx?: SxProps<Theme>;
 }
 
-function getChipColor(subValue: string | undefined): "default" | "success" | "error" | "info" {
+function getChipColor(
+    subValue: string | undefined
+): "default" | "success" | "error" | "info" {
     if (!subValue) return "default";
 
     // Simple check for plus/minus sign
@@ -56,6 +64,7 @@ const StatCard: React.FC<StatCardProps> = ({
     value,
     valueColor = "text.primary",
     subValue,
+    onRedirect,
     sx,
 }) => {
     const subValueColor = getChipColor(subValue);
@@ -66,6 +75,7 @@ const StatCard: React.FC<StatCardProps> = ({
                 border: (theme) => `1px solid ${theme.palette.divider}`,
                 boxShadow: 0,
                 backgroundColor: (theme) => theme.palette.background.paper,
+                position: "relative",
                 ...sx,
             }}
         >
@@ -73,7 +83,13 @@ const StatCard: React.FC<StatCardProps> = ({
                 {/* Top Row: Icon + Title */}
                 <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
                     {icon && (
-                        <Box sx={{ mr: 1, display: "flex", alignItems: "center" }}>
+                        <Box
+                            sx={{
+                                mr: 1,
+                                display: "flex",
+                                alignItems: "center",
+                            }}
+                        >
                             {icon}
                         </Box>
                     )}
@@ -111,6 +127,25 @@ const StatCard: React.FC<StatCardProps> = ({
                         />
                     )}
                 </Box>
+
+                {/* Bottom Right: Optional Redirect Icon */}
+                {onRedirect && (
+                    <IconButton
+                        size="small"
+                        onClick={onRedirect}
+                        sx={{
+                            position: "absolute",
+                            bottom: 8,
+                            right: 8,
+                            color: "text.secondary",
+                            "&:hover": {
+                                color: "primary.main",
+                            },
+                        }}
+                    >
+                        <ArrowUpRight size={18} />
+                    </IconButton>
+                )}
             </CardContent>
         </Card>
     );
